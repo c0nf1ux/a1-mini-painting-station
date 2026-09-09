@@ -136,3 +136,11 @@ module is blocked until one is supplied.
   connector, is designed to be support-free).
 - Water Reservoir gets 4+ walls given it's the only module holding standing
   liquid; every other module uses the standard profile.
+
+## Licensing & publishing
+
+MIT for `lib/` and `config.scad` (the reusable parametric tooling); CC
+BY-NC-SA 4.0 for `modules/` (the original module designs) — see `LICENSE`
+and `LICENSE-MODULES.md` for the full split and the reasoning behind it.
+Every module goes through `docs/PUBLISH-CHECKLIST.md` before it's listed
+anywhere public.
