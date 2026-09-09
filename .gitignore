@@ -2,3 +2,7 @@
 Thumbs.db
 *.bak
 *~
+
+# Throwaway validation prints (connector stubs, etc.) — not final module
+# output, not tracked. Copy final module STLs into modules/ deliberately.
+print-ready/
