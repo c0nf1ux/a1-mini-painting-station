@@ -17,6 +17,48 @@
 - No fabricated dimensions: every constant in `config.scad` is tagged `MEASURED`, `SOURCE`, or `MEASURE` per `docs/PROJECT-SPEC.md`'s Parameters table, and that tagging must be preserved as comments in the code.
 - Physical print/measurement steps in this plan (connector fit-check, water-tightness) cannot be performed by an agent — they're called out explicitly as **MANUAL CHECKPOINT** and are the user's responsibility between tasks.
 
+## Execution Log
+
+**2026-09-09 — Tasks 1-3 done, blocked on Task 2's manual checkpoint.**
+
+- Task order deviated from this doc: Task 3 (`config.scad`) was done *before*
+  Task 2 (connector library), because `lib/connector_test.scad` `include`s
+  `config.scad` — the plan's listed order had a dependency gap. No content
+  changed, just the sequence.
+- `dovetail_tab()` in `lib/connector.scad` was adjusted from the version
+  printed earlier in this doc: the root now starts at `x=-0.3` (not `x=0`)
+  so it always has real volumetric overlap with whatever it's unioned onto,
+  avoiding a coincident-face CSG edge case. OpenSCAD's console reported
+  "Volumes: 2" for the unioned stub either way — confirmed via
+  `trimesh.load(path).split(only_watertight=False)` returning exactly 1
+  connected component that this is a fused single solid, not two disjoint
+  pieces; that console stat isn't a trustworthy signal, don't rely on it in
+  later tasks.
+- Both connector stub STLs (`print-ready/connector_tab_stub.stl`,
+  `print-ready/connector_slot_stub.stl` — gitignored, throwaway validation
+  prints) are uploaded privately to MakerWorld, but **printing is blocked**:
+  the printer is occupied through the week, and the MakerWorld upload alone
+  isn't enough to print via Handy (STL-only uploads have no attached slice
+  profile — Handy's preview errors asking for a Bambu Studio/OrcaSlicer
+  `.3mf` instead). Real next steps to actually print, whenever the printer's
+  free:
+  1. Open OrcaSlicer GUI (never launched on this machine before — no
+     printer paired yet) and pair the A1 mini via Bambu cloud login.
+  2. Filament profile **"Bambu PLA Basic @BBL A1M"**, process profile
+     **"0.20mm Standard @BBL A1M"** (A1 mini profiles use the "A1M"
+     abbreviation in bundled filenames).
+  3. Import both stub STLs (small enough for one plate/one print job).
+  4. Slice, then Print — sends directly to the paired printer over
+     network/cloud, bypassing MakerWorld/Handy for the actual print.
+  5. **MANUAL CHECKPOINT** from Task 2 Step 4 still applies once printed:
+     set the tab stub down onto the slot stub, confirm it seats without
+     forcing and resists sideways separation without lifting first.
+- The OrcaSlicer **CLI** recipe this doc's Tech Stack line references
+  (`orca-slicer.exe --slice 0 --load-settings ...`) failed when tried
+  (`file ...machine.json's from unsupported`) — not root-caused, not worth
+  blocking on. Use the GUI path above instead; don't re-attempt the CLI
+  recipe without expecting to debug it first.
+
 ---
 
 ## Assembly note (why this connector works without gluing)
