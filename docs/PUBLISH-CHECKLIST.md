@@ -54,13 +54,13 @@ pain-point project — copy it forward rather than re-deriving it each time.
   published modules actually generate payout, not just visibility.
 - [ ] GitHub repo description and README point to the MakerWorld listing(s)
   once published, and vice versa — the two should cross-link.
-- [ ] **Future, not yet done:** evaluate [Bambuddy](https://printer-hub.ru/en/posts/bambuddy-self-hosted-bambu-lab)
-  (self-hosted, MQTT/FTPS direct printer control, has a built-in MakerWorld
-  integration module) as a way to skip the manual MakerWorld upload-form
-  flow this checklist currently documents by hand. Not required to start
-  publishing — the manual flow above works today — but worth revisiting once
-  publishing multiple modules makes the manual form tedious. See the local
-  tooling reference memory for the real setup/risk tradeoffs before doing this.
+- [x] **Decided against Bambuddy (2026-09-10):** rather than run a
+  self-hosted service (more background load on a machine that already
+  chokes running OrcaSlicer's GUI alongside VS Code), built lightweight
+  on-demand scripts instead — direct FTPS/MQTT to the printer, no persistent
+  process. See `docs/AUTOMATION.md`. This covers "get a file onto the
+  printer and print it" headlessly; it doesn't touch the MakerWorld
+  publish-form flow above, which is still manual.
 
 ## After publishing
 
