@@ -54,6 +54,13 @@ pain-point project — copy it forward rather than re-deriving it each time.
   published modules actually generate payout, not just visibility.
 - [ ] GitHub repo description and README point to the MakerWorld listing(s)
   once published, and vice versa — the two should cross-link.
+- [ ] **Future, not yet done:** evaluate [Bambuddy](https://printer-hub.ru/en/posts/bambuddy-self-hosted-bambu-lab)
+  (self-hosted, MQTT/FTPS direct printer control, has a built-in MakerWorld
+  integration module) as a way to skip the manual MakerWorld upload-form
+  flow this checklist currently documents by hand. Not required to start
+  publishing — the manual flow above works today — but worth revisiting once
+  publishing multiple modules makes the manual form tedious. See the local
+  tooling reference memory for the real setup/risk tradeoffs before doing this.
 
 ## After publishing
 
