@@ -6,6 +6,14 @@ pain-point project — copy it forward rather than re-deriving it each time.
 
 ## Before publishing a module
 
+- [ ] **Upload includes a sliced `.3mf`, not just the raw STL/CAD file.**
+  Confirmed by hitting this directly (2026-09-09): an STL/CAD-only upload has
+  no attached print profile, so MakerWorld can't generate a Handy print
+  preview for it ("please print it with Bambu Studio on your computer").
+  Slice locally first (OrcaSlicer or Bambu Studio — same workflow, OrcaSlicer
+  is already installed), then either attach the resulting `.3mf` to the
+  MakerWorld upload, or skip MakerWorld/Handy for your own prints entirely
+  and send straight from the slicer to the printer over network/cloud.
 - [ ] **Printed, not just rendered.** No module goes up on the strength of an
   OpenSCAD `--render` preview alone. Print it on the actual A1 mini first.
 - [ ] **Connector validated against at least one sibling module**, not just
