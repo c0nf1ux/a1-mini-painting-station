@@ -74,8 +74,20 @@ open on the PC. See project memory for the full incident writeup.
 
 ## Slicing (CLI, no GUI)
 
-OrcaSlicer CLI slicing already works as of 2026-09-09 — use the
-nozzle-specific machine preset file (e.g. `Bambu Lab A1 mini 0.4
-nozzle.json`), not the bare `Bambu Lab A1 mini.json` model file, which
-fails with an "unsupported" error on `--load-settings`. Full recipe in
-project memory (`a1_mini_painting_station_project.md`).
+Use the wrapper:
+
+```bash
+./print-profiles/slice.sh print-ready/bottle_row.stl
+```
+
+It flattens the stock Bambu presets (the CLI does not resolve their
+`inherits` chains — it silently substitutes program defaults), applies
+this project's corrections from `print-profiles/overrides.json`, and
+slices with the nozzle-specific machine preset (`Bambu Lab A1 mini 0.4
+nozzle.json`, not the bare model file, which errors on `--load-settings`).
+
+**Why this replaced the raw CLI recipe:** bottle_row test print #1
+(2026-09-10) failed — the raw recipe's slice ran the bed at 35 °C on a
+plate that needs 65 °C and added no brim, so a 135 mm PLA slab peeled off
+at ~6 mm and spaghetti'd. Full post-mortem and the corrected settings:
+`print-profiles/README.md`.

@@ -1,0 +1,10 @@
+{
+	"_comment": "Deltas from resolved-stock Bambu presets, applied by flatten.py. Each key is a deliberate change with its reason in README.md. Empty sections mean resolved stock is already correct.",
+	"process": {
+		"curr_bed_type": "Textured PEI Plate",
+		"brim_type": "outer_only",
+		"brim_width": "5",
+		"brim_object_gap": "0.1"
+	},
+	"filament": {}
+}

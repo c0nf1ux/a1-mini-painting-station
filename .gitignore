@@ -9,3 +9,9 @@ print-ready/
 
 # Local printer credentials (LAN Access Code) — never commit
 scripts/printer_config.local.json
+
+# Flattened slicer presets — regenerated from overrides.json every slice
+print-profiles/flat/
+
+# OrcaSlicer CLI drops this in cwd (headless OpenGL thumbnail failure)
+00000.log
