@@ -23,6 +23,20 @@ well_depth   = 20;
 corner_r     = 8;
 total_height = base_plinth_height + well_depth;
 
+// Root cause of the printed-part hole: edge_slot() (lib/connector.scad)
+// cuts depth+0.2 = 3.7mm deep into the x=0 face, and also pokes 0.4mm
+// above base_plinth_height into the rim. rounded_well()'s own 1mm bite
+// below base_plinth_height (see its header) overlaps that same z-band.
+// With wall=3mm < 3.7mm, the well's inner face (x=wall) sat inside the
+// slot's cut zone, so the two voids joined into one tunnel straight
+// through the connector-side wall into the reservoir. Only the slot
+// edge (x=0) needs extra clearance — widening `wall` on all four sides
+// would cost ~12% of the reservoir's volume for no reason.
+slot_wall    = tab_depth + 0.2 + 0.8;  // slot cut depth + its fixed
+                                        // 0.2mm overcut + 0.8mm real
+                                        // print-safety margin
+well_x0      = max(wall, slot_wall);
+
 module rounded_well(x, y, w, h, r, depth) {
     // Starts 1mm into the plinth top (clean CSG fusion, same overcut
     // convention as bottle_row.scad) and punches 2mm past the rim's
@@ -46,5 +60,5 @@ difference() {
             cube([footprint_x, footprint_y, well_depth]);
     }
     edge_slot(footprint_y, width=tab_width, depth=tab_depth, height=base_plinth_height, clearance=tab_clearance);
-    rounded_well(wall, wall, footprint_x - 2*wall, footprint_y - 2*wall, corner_r, well_depth);
+    rounded_well(well_x0, wall, footprint_x - well_x0 - wall, footprint_y - 2*wall, corner_r, well_depth);
 }
