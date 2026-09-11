@@ -10,6 +10,17 @@ still reads as a single continuous bench setup. Reference layout: Polvak3D's
 "Z-Desk Paint Master" (https://makerworld.com/en/models/1625421), redesigned
 here as six independent single-purpose modules.
 
+**Course-correction note (2026-09-11):** Modules 1-4's first pass drifted
+into generic, plain geometry (flat single-row bottle rack, plain
+rectangular basin) that didn't carry over the reference design's actual
+functional bones — a stepped/tiered bottle layout, a combined scrub+water
+unit, dense hole-grid tool holders. Scope is the reference's *functional*
+layout only, not its ornamental engraving or two-tone color scheme (no
+AMS/4-color feeder here, and that's the one part of the reference that's
+actually copyright-sensitive — useful-article functional features aren't
+protected, ornamental expression is). Module 1 was the first module
+corrected; see its entry below and the 2026-09-11 spec/plan docs.
+
 ## Repo & file structure
 
 ```
@@ -64,7 +75,8 @@ module is blocked until one is supplied.
 
 | Parameter | Value | Status | Note |
 |---|---|---|---|
-| `bottle_diameter` | 28mm | SOURCE | Vallejo 20ml dropper-bottle listing, used as a proxy for the user's Smallbudi 20ml bottles (same volume class, same dropper format) |
+| `bottle_diameter` | 26mm | SOURCE | **2026-09-11, finalized (still SOURCE, verify with calipers on a real bottle before final print):** LITKO Game Accessories (a company that manufactures paint racks) publishes a fit table — Vallejo 17-18ml, Army Painter Warpaints/Fanatic/Speedpaint, AK Interactive 3rd Gen, Scale75, Reaper MSP, and Two Thin Coats all fit the same 26mm hole ("bottles about 25mm across"). Replaces the earlier 28mm single-listing (Vallejo 20ml) proxy — a manufacturer's tolerance-inclusive number beats one retail listing. Scope is the dropper-bottle family only; Citadel's flip-top pots are a genuinely different shape (30-34mm wide, 32-45mm tall depending on line — Base/Layer ~32mm, Dry/Technical ~35mm, Contrast ~45mm) and are deferred to a future brand-specific module rather than forcing one well to fit both shapes. Source: https://litko.net/pages/paint-racks and https://cypaint.com/article/what-are-the-dimensions-of-citadel-paint-pot (both fetched via Firecrawl after a plain-fetch 403). |
+| `well_clearance` | 0.75mm | SOURCE | **Added 2026-09-11.** Community guidance range 0.5-1mm per side for a bottle pulled in/out by hand, distinct from `tab_clearance` (0.15-0.2mm, tuned for the connector's printed-in-place snap fit). `bottle_row.scad` wells use this now instead of reusing `tab_clearance`. |
 | `handle_width` | 10mm | MEASURED | User's brush set, thickest handle point |
 | `brush_length` | 220mm | MEASURED | User's brush set, sizes Module 3's footprint |
 | `marker_diameter` | — | MEASURE | No marker product selected yet — Module 5 is blocked on this |
@@ -73,19 +85,53 @@ module is blocked until one is supplied.
 
 ## Modules
 
-### Module 1 — Bottle Row (×4 bottles per module)
-- Footprint: ~110-130mm × 40-50mm, well under the 180mm bed edge.
-- Wells sized to `bottle_diameter`, angled back 5-10° for label visibility.
+### Module 1 — Bottle Row (×8 bottles per module, 2 rows of 4)
+- **Redesigned 2026-09-11** from a flat single row into a 2-row "stadium"
+  layout — back row's collar taller than the front row's (25mm / 45mm) so
+  both rows' labels stay visible from the front, matching the reference
+  design's actual functional layout instead of a generic flat row. See
+  `docs/superpowers/specs/2026-09-11-tiered-bottle-rack-design.md` for the
+  full design and `docs/superpowers/plans/2026-09-11-tiered-bottle-rack.md`
+  for the implementation. No angled step face needed between the two
+  collar heights — two straight vertical prisms of different heights don't
+  overhang.
+- Footprint: 135 × 76mm (widened in Y from the original 45mm single-row
+  footprint to fit both rows), well under the 180mm bed edge.
+- Wells sized to `bottle_diameter` + `well_clearance`, angled back 8° for
+  label visibility (both rows share the same tilt).
 - Print as many copies as needed for the full paint collection — highest
   reprint frequency of any module.
+- **Sent to printer 2026-09-11, physical fit-test pending** — real dropper
+  bottles needed to confirm `row_step` (20mm, DECIDED not measured) and
+  `well_clearance` feel right.
+- Scoped to the dropper-bottle family only (Vallejo/Army Painter/AK
+  Interactive/Scale75/Reaper/Two Thin Coats). Citadel pots are a separate
+  future module (different bottle shape, not just a size variant) — build
+  it once real Citadel pots are on hand to measure, per the user's own
+  per-brand-module plan.
 
 ### Module 2 — Water Reservoir
+- **2026-09-11: current implementation is a throwaway alpha**, kept for
+  what it taught about the plinth/connector mechanics, not as the final
+  design. It shipped as a plain rectangular basin + separate scrubber
+  insert; the reference design's actual bones are a *combined* scrub-box +
+  water-trough as one printed unit with a ridged interior, which is planned
+  as a future redesign spec once Module 1's fit-test is done. Do not treat
+  the description below as final.
 - Footprint: 60-100mm on the long side.
 - Single open well, rounded interior corners for cleaning, 2.5-3mm minimum
   wall thickness for water tightness, slight interior taper so debris settles
   rather than clinging to vertical walls.
 - 4+ walls on the slicer profile specifically for this module — the only one
   holding standing liquid.
+- **Known bug, fixed 2026-09-11:** the connector slot cut (`edge_slot()`,
+  3.7mm deep) overlapped the well cavity's 1mm plinth bite, tunneling
+  straight through the connector-side wall — visible as a hole in the
+  printed part exactly at the connector. Fixed by pushing the well's inner
+  wall back to 4.5mm on the slot side only. **Any future module with a
+  cavity within ~5mm of a connector edge must re-run this check** — verify
+  with `trimesh` point-containment (watertight checks alone do NOT catch
+  this; a tunnel is still a closed manifold), not just by eye.
 
 ### Module 3 — Brush Flat-Lay Wet Holder
 - Footprint: sized off `brush_length` (220mm) and `handle_width` (10mm).
