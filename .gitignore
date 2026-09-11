@@ -15,3 +15,6 @@ print-profiles/flat/
 
 # OrcaSlicer CLI drops this in cwd (headless OpenGL thumbnail failure)
 00000.log
+
+# Firecrawl scrape scratch output — research artifacts, not project source
+.firecrawl/
